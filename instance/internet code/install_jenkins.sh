@@ -1,14 +1,24 @@
 #!/bin/bash
-sudo dnf update -y
+dnf update -y
 # Install Java 17 Amazon Corretto
-sudo dnf install java-17-amazon-corretto -y
+yum install java-21-amazon-corretto -y
+VALIDATE $? "jav"
 # Add the Jenkins repository
-sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+#sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+wget -O /etc/yum.repos.d/jenkins.repo \
+        https://pkg.jenkins.io/redhat-stable/jenkins.repo
+VALIDATE $? "wget"
 # Import a key file from Jenkins-CI to enable installation from the package
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+VALIDATE $? "import "
 # Install Jenkins
-sudo dnf install jenkins -y
+yum install jenkins -y
+VALIDATE $? "install "
 # Enable the Jenkins service to start at boot
-sudo systemctl enable jenkins
+systemctl enable jenkins
+VALIDATE $? "enable "
 # Start the Jenkins service
-sudo systemctl start jenkins
+systemctl start jenkins
+VALIDATE $? "starting "
